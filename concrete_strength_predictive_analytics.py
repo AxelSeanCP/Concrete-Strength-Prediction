@@ -126,23 +126,6 @@ correlation_matrix = concrete_data.corr().round(2)
 sns.heatmap(data=correlation_matrix, annot=True, cmap='coolwarm', linewidth=0.5)
 plt.title("Correlation Matrix for Numerical Features")
 
-"""## Check dataset nature
-- to determine whether a dataset is linear or non linear we can run a simple linear regression on it
-- if the accuracy is high that means the dataset has a linear nature
-- if the accuracy is low that means the dataset is non linear
-"""
-
-from sklearn.linear_model import LinearRegression
-linreg = LinearRegression()
-
-con_feat = concrete_compressive_strength.data.features
-con_tar = concrete_compressive_strength.data.targets
-
-linreg.fit(con_feat,con_tar)
-
-from sklearn.metrics import r2_score
-print(r2_score(linreg.predict(con_feat), con_tar))
-
 """# Data Preparation
 - split features and target
 - split into train and test
