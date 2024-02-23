@@ -49,7 +49,7 @@ Checking missing values
 ![feature description](img/desc_feat.png)  
 Here it is assumed that features with a value of 0 mean that the component is not used in the process of mixing the concrete. So, those with a value of 0 will not be dropped.
 
-### Visualisasi Data
+### Data Visualization
 - Univariate Analysis
 
 ![univar_analysis](img/univariate_analysis.png)
