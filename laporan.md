@@ -15,6 +15,7 @@ Seperti yang dijelaskan sebelumnya terkadang pembuatan campuran beton dilakukan 
 
 ### Problem Statement
 - Bagaimana cara prediksi kekuatan tekan beton berdasarkan data komponen yang digunakan dalam campuran suatu beton untuk meningkatkan efisiensi dan keamanan
+- Bagaimana cara mendapatkan model machine learning dengan tingkat error dibawah 5% 
 
 ### Goals
 - Berhasil melakukan prediksi kekuatan tekan beton menggunakan model machine learning
@@ -113,44 +114,37 @@ Algoritma yang digunakan:
     * Kelebihan: Mudah dipahami dan diimplementasikan, tidak memerlukan pembelajaran atau training yang kompleks.
     * Kelemahan: Kinerjanya lambat untuk dataset besar, sensitif terhadap data yang tidak terstandarisasi, dan perlu memilih parameter K yang tepat.
     * Parameter:
-        - n_neighbors = jumlah tetangga terdekat yang akan digunakan untuk prediksi nilai target
+        - n_neighbors: '6', jumlah tetangga terdekat yang akan digunakan untuk prediksi nilai target
 
 2. **Support Vector Regressor (SVM)**: *SVM* adalah algoritma pencari hyperplane terbaik yang memisahkan 2 kelas dari ruang fitur. Pada kasus regresi algoritma ini mencari hyperplane dengan margin terbesar antara data. Algoritma ini digunakan karena cocok untuk mengatasi dataset non-linear melalui parameter "kernel".
     * Kelebihan: Efektif dalam dataset dengan banyak fitur, dapat menangani data non-linear melalui kernel, dan cenderung lebih toleran terhadap overfitting.
     * Kelemahan: Memerlukan tuning parameter yang tepat, seperti kernel dan C, serta tidak efisien untuk dataset sangat besar.
     * Parameter:
-        - kernel = digunakan untuk mengubah data input ke dimensi yang lebih tinggi.
-        - rbf = fungsi kernel yang berguna untuk data non-linear (argumen dari parameter kernel).
+        - kernel: 'rbf', digunakan untuk mengubah data input ke dimensi yang lebih tinggi.
+        - 'rbf' = fungsi kernel yang berguna untuk data non-linear (argumen dari parameter kernel).
 
 3. **Random Forest**: *RF* adalah algoritma yang terdiri dari banyak pohon keputusan yang dihasilkan secara acak, kemudian rata-rata dari hasil akhir tiap pohon akan digunakan untuk prediksi. Algoritma ini digunakan karena kemampuannya dalam menangani data non-linear dan dapat memberikan hasil yang stabil. 
     * Kelebihan: Dapat menangani data yang tidak terstruktur dan fitur-fitur yang tidak terstandarisasi, tahan terhadap outliers dan noise, serta mudah digunakan.
     * Kelemahan: Kemungkinan overfitting pada dataset kecil dengan fitur-fitur yang sangat beragam, serta sulit untuk diinterpretasi.
     * Parameter:
-        - n_estimators = jumlah pohon keputusan dalam random forest, makin banyak makin kompleks dan komputasinya mahal.
-        - max_depth = kedalaman maksimum tiap pohon keputusan.
-        - random_state = mengontrol randomness dalam model, jika diberi nilai maka akan dirandom secara konsisten.
-        - n_jobs = jumlah pekerjaan yang akan digunakan secara paralel untuk pemrosesan.
+        - n_estimators: '16', jumlah pohon keputusan dalam random forest, makin banyak makin kompleks dan komputasinya mahal.
+        - max_depth: '8', kedalaman maksimum tiap pohon keputusan.
+        - random_state: '69', mengontrol randomness dalam model, jika diberi nilai maka akan dirandom secara konsisten.
+        - n_jobs: '-1',jumlah pekerjaan yang akan digunakan secara paralel untuk pemrosesan. Nilai defaultnya adalah **None**, jika diisi -1 maka akan menggunakan semua inti cpu yang tersedia.
 
 4. **Extreme Gradient Boosting (XGBRegressor)**: *XGBRegressor* adalah implementasi dari algoritma gradient boosting yang menggabungkan beberapa model lemah (weak learner) dan menambahkan wear learner baru pada tiap iterasi dengan tujuan memperbaiki hasil prediksi sebelumnya. Algoritma ini digunakan karena dapat memberi performa yang baik dalam memprediksi nilai target
     * Kelebihan: Biasanya memberikan performa yang sangat baik, toleran terhadap overfitting, dan efisien dalam waktu komputasi.
     * Kelemahan: Memerlukan penyetelan parameter yang cermat, serta dapat memerlukan lebih banyak pemrosesan komputasi dibandingkan dengan model lainnya.
     * Parameter:
-        - objective = fungsi tujuan untuk pemodelan. tujuannya adalah squared error regression loss yang cocok dengan loss function.
-        - n_estimators = jumlah pohon keputusan dalam model ensemble.
-        - max_depth = kedalaman maksimum tiap pohon keputusan.
-        - learning_rate = mengontrol seberapa besar langkah pembelajaran yang diambil pada setiap iterasi.
-        - subsample = Fraksi dari dataset yang akan digunakan untuk pelatihan setiap pohon.
-        - colsample_bytree = Fraksi dari fitur yang akan digunakan dalam pembentukan setiap pohon. 
+        - objective: 'reg:squarederror', fungsi tujuan untuk pemodelan. tujuannya adalah squared error regression loss yang cocok dengan loss function.
+        - n_estimators: '16', jumlah pohon keputusan dalam model ensemble.
+        - max_depth: '8', kedalaman maksimum tiap pohon keputusan.
+        - learning_rate: '0.3', mengontrol seberapa besar langkah pembelajaran yang diambil pada setiap iterasi.
+        - subsample: '0.5', Fraksi dari dataset yang akan digunakan untuk pelatihan setiap pohon.
+        - colsample_bytree: '0.5', Fraksi dari fitur yang akan digunakan dalam pembentukan setiap pohon. 
 
 ## Evaluation
-Metrik evaluasi yang digunakan yaitu loss function **root_mean_squared_error (RMSE)**, implementasinya pada kode berikut
-
-```
-from sklearn.metrics import mean_squared_error
-
-def rmse(y_pred, y_true):
-  return np.sqrt(mean_squared_error(y_pred=y_pred, y_true=y_true))
-```
+Metrik evaluasi yang digunakan yaitu loss function **root_mean_squared_error (RMSE)**, implementasinya menggunakan loss function mean_squared error dari sklearn yang di akar kan menggunakan numpy.sqrt(). Hasilnya adalah loss function RMSE.
 
 RMSE atau Root Mean Squared Error adalah loss function yang didapat dari proses mengkuadratkan error (y_asli - y_prediksi) dan dibagi jumlah yang menjadi rata-rata lalu di akarkan
 
